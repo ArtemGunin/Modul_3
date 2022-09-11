@@ -5,21 +5,21 @@
 <hibernate-configuration>
     <session-factory>
 
-        <property name="connection.url">jdbc:postgresql://localhost:5432/module</property> <!-- BD Mane -->
+        <property name="connection.url">jdbc:postgresql://localhost:5432/university</property> <!-- BD Mane -->
         <property name="connection.driver_class">org.postgresql.Driver</property> <!-- DB Driver -->
         <property name="connection.username">postgres</property> <!-- DB User -->
         <property name="connection.password">root</property> <!-- DB Password -->
 
         <property name="dialect">org.hibernate.dialect.PostgreSQL10Dialect</property> <!-- DB Dialect -->
-        <property name="hbm2ddl.auto">create-drop</property> <!-- create / create-drop / update -->
+        <property name="hbm2ddl.auto">update</property> <!-- create / create-drop / update -->
 
         <property name="show_sql">false</property>
         <property name="format_sql">true</property> <!-- Show SQL formatted -->
-        <mapping class="com.model.Invoice"/>
-        <mapping class="com.model.product.TV"/>
-        <mapping class="com.model.product.Product"/>
-        <mapping class="com.model.product.Toaster"/>
-        <mapping class="com.model.product.Phone"/>
+        <mapping class="com.nix11.model.Student"/>
+        <mapping class="com.nix11.model.Groups"/>
+        <mapping class="com.nix11.model.Teacher"/>
+        <mapping class="com.nix11.model.Subject"/>
+        <mapping class="com.nix11.model.Mark"/>
 
     </session-factory>
 </hibernate-configuration>
