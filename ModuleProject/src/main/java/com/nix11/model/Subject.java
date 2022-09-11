@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.time.LocalDate;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,13 +14,11 @@ import java.time.LocalDate;
 @Setter
 @ToString
 @Entity
-public class Student {
+public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    protected String studentId;
-    private String name;
-    private String surname;
-    private int age;
-    private LocalDate entryDate;
+    private String subjectId;
+    private int code;
+    private String title;
 }

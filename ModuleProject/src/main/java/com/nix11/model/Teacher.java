@@ -3,11 +3,7 @@ package com.nix11.model;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.time.LocalDate;
+import javax.persistence.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,13 +11,15 @@ import java.time.LocalDate;
 @Setter
 @ToString
 @Entity
-public class Student {
+public class Teacher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    protected String studentId;
+    protected String teacherId;
     private String name;
     private String surname;
     private int age;
-    private LocalDate entryDate;
+    @OneToOne
+    @JoinColumn(name = "subject_id")
+    private Subject subject;
 }

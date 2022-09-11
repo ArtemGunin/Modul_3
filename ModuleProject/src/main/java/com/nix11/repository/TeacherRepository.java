@@ -1,67 +1,75 @@
 package com.nix11.repository;
 
 import com.nix11.config.HibernateFactoryUtils;
-import com.nix11.model.Student;
+import com.nix11.model.Teacher;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-public class StudentRepository implements CrudRepository<Student> {
+public class TeacherRepository implements CrudRepository<Teacher> {
 
     private static final SessionFactory SESSION_FACTORY = HibernateFactoryUtils.getSessionFactory();
 
-    private static StudentRepository instance;
+    private static TeacherRepository instance;
 
-    public static StudentRepository getInstance() {
+    public static TeacherRepository getInstance() {
         if (instance == null) {
-            instance = new StudentRepository();
+            instance = new TeacherRepository();
         }
         return instance;
     }
 
-    public Map<Student, Double> getStudentsWithAverageMarkMoreThen(double lowerBound) {
+    public List<Teacher> getTeacherByName(String name) {
         Session session = SESSION_FACTORY.openSession();
         session.beginTransaction();
-        Map<Student, Double> studentsWithMarkMoreThen = session
-                .createQuery("select student from Student student", Student.class)
-                .getResultList().stream()
-                .filter(student -> MarkRepository.getInstance().studentGPA(student.getStudentId()) > lowerBound)
-                .collect(Collectors.toMap(student -> student,
-                        student1 -> MarkRepository.getInstance().studentGPA(student1.getStudentId())));
+        List<Teacher> teachers = session
+                .createQuery("select teacher from Teacher teacher where name = : name", Teacher.class)
+                .setParameter("name", name)
+                .list();
         session.getTransaction().commit();
         session.close();
-        return studentsWithMarkMoreThen;
+        return teachers;
+    }
+
+    public List<Teacher> getTeacherBySurname(String surname) {
+        Session session = SESSION_FACTORY.openSession();
+        session.beginTransaction();
+        List<Teacher> teachers = session
+                .createQuery("select teacher from Teacher teacher where surname = : surname", Teacher.class)
+                .setParameter("surname", surname)
+                .list();
+        session.getTransaction().commit();
+        session.close();
+        return teachers;
     }
 
     @Override
-    public void save(Student student) {
+    public void save(Teacher teacher) {
         Session session = SESSION_FACTORY.openSession();
         session.beginTransaction();
-        session.save(student);
+        session.save(teacher);
         session.getTransaction().commit();
         session.close();
     }
 
     @Override
-    public void saveAll(List<Student> students) {
+    public void saveAll(List<Teacher> teachers) {
         Session session = SESSION_FACTORY.openSession();
         session.beginTransaction();
-        for (Student student : students) {
-            session.save(student);
+        for (Teacher teacher : teachers) {
+            session.save(teacher);
         }
         session.getTransaction().commit();
         session.close();
     }
 
     @Override
-    public void update(Student student) {
+    public void update(Teacher teacher) {
         Session session = SESSION_FACTORY.openSession();
         session.beginTransaction();
-        session.update(student);
+        session.update(teacher);
         session.getTransaction().commit();
         session.close();
     }
@@ -70,7 +78,7 @@ public class StudentRepository implements CrudRepository<Student> {
     public void delete(String id) {
         Session session = SESSION_FACTORY.openSession();
         session.beginTransaction();
-        session.createQuery("delete from Student where id = :value")
+        session.createQuery("delete from Teacher where id = :value")
                 .setParameter("value", id)
                 .executeUpdate();
         session.getTransaction().commit();
@@ -78,24 +86,24 @@ public class StudentRepository implements CrudRepository<Student> {
     }
 
     @Override
-    public List<Student> getAll() {
+    public List<Teacher> getAll() {
         Session session = SESSION_FACTORY.openSession();
         session.beginTransaction();
-        List<Student> students = session
-                .createQuery("select student from Student student", Student.class)
+        List<Teacher> teachers = session
+                .createQuery("select teacher from Teacher teacher", Teacher.class)
                 .list();
         session.getTransaction().commit();
         session.close();
-        return students;
+        return teachers;
     }
 
     @Override
-    public Optional<Student> getById(String id) {
+    public Optional<Teacher> getById(String id) {
         Session session = SESSION_FACTORY.openSession();
         session.beginTransaction();
-        Optional<Student> student = Optional.ofNullable(session.get(Student.class, id));
+        Optional<Teacher> teacher = Optional.ofNullable(session.get(Teacher.class, id));
         session.getTransaction().commit();
         session.close();
-        return student;
+        return teacher;
     }
 }
